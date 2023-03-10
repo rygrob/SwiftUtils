@@ -60,21 +60,22 @@ public extension UIView {
 // MARK: - Guide Layers
 
 public extension UIView {
-    /// Helper enum for Guide Layers so we don't have to rely on UIAxis
+    
     enum GuideAxis { case vertical, horizontal }
     
     /// Makes a set of zero-width guide layers (views) for easily anchoring other views.
     /// - Parameters:
     ///   - view: The parent view for the guide layers.
-    ///   - axis: Vertical or horizontal.
+    ///   - axis: Horizontal or vertical.
     ///   - multipliers: The relative positions of the guide layers, on 0...1.
-    ///   - debug: Setting true gives the guide layers a width of one and a red background color.
-    /// - Returns: A dictionary with the multipliers mapped to appropriately constrained UIViews, which are subviews of the target view.
-    static func makeGuideLayers(for view: UIView, axis: GuideAxis, multipliers: [CGFloat], debug: Bool = false) -> [CGFloat: UIView] {
+    ///   - debug: Setting true makes the guide layers one pixel wide with a red background color.
+    /// - Returns: An array of appropriately constrained UIViews, which are subviews of the target view.
+    static func makeGuideLayers(for view: UIView, axis: GuideAxis, multipliers: [CGFloat], debug: Bool = false) -> [UIView] {
+        guard axis != .both else { return [] }
         
-        var dict: [CGFloat: UIView] = [:]
+        var views: [UIView] = []
         
-        for mult in multipliers {
+        for multiplier in multipliers {
             
             let v = UIView()
             v.translatesAutoresizingMaskIntoConstraints = false
@@ -87,7 +88,7 @@ public extension UIView {
                 v.heightAnchor.constraint(equalToConstant: debug ? 1 : 0).isActive = true
                 
                 // Set top based on multiplier.
-                NSLayoutConstraint(item: v, attribute: .top, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: mult, constant: 0).isActive = true
+                NSLayoutConstraint(item: v, attribute: .top, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: multiplier, constant: 0).isActive = true
             }
             
             else if axis == .vertical {
@@ -96,16 +97,16 @@ public extension UIView {
                 v.widthAnchor.constraint(equalToConstant: debug ? 1 : 0).isActive = true
                 
                 // Set leading based on multiplier.
-                NSLayoutConstraint(item: v, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: mult, constant: 0).isActive = true
+                NSLayoutConstraint(item: v, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: multiplier, constant: 0).isActive = true
             }
             
-            dict[mult] = view
+            views.append(v)
         }
         
-        return dict
+        return views
     }
     
-    func makeGuideLayers(axis: GuideAxis, multipliers: [CGFloat], debug: Bool = false) -> [CGFloat: UIView] {
+    func makeGuideLayers(axis: GuideAxis, multipliers: [CGFloat], debug: Bool = false) -> [UIView] {
         return UIView.makeGuideLayers(for: self, axis: axis, multipliers: multipliers, debug: debug)
     }
 }
