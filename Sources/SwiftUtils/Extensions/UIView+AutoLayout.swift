@@ -71,8 +71,6 @@ public extension UIView {
     ///   - debug: Setting true makes the guide layers one pixel wide with a red background color.
     /// - Returns: An array of appropriately constrained UIViews, which are subviews of the target view.
     static func makeGuideLayers(for view: UIView, axis: GuideAxis, multipliers: [CGFloat], debug: Bool = false) -> [UIView] {
-        guard axis != .both else { return [] }
-        
         var views: [UIView] = []
         
         for multiplier in multipliers {
