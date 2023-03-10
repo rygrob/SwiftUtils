@@ -60,8 +60,8 @@ public extension UIView {
 // MARK: - Guide Layers
 
 public extension UIView {
-    
-    enum GuideAxis { case vertical, horizontal }
+    /// Guide layer axis helper enum.
+    enum GuideAxis { case horizontal, vertical }
     
     /// Makes a set of zero-width guide layers (views) for easily anchoring other views.
     /// - Parameters:
@@ -80,16 +80,16 @@ public extension UIView {
             v.backgroundColor = debug ? .red : .clear
             view.addSubview(v)
             
-            if axis == .horizontal {
+            switch axis {
+            case .horizontal:
                 v.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
                 v.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
                 v.heightAnchor.constraint(equalToConstant: debug ? 1 : 0).isActive = true
                 
                 // Set top based on multiplier.
                 NSLayoutConstraint(item: v, attribute: .top, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: multiplier, constant: 0).isActive = true
-            }
-            
-            else if axis == .vertical {
+                
+            case .vertical:
                 v.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
                 v.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
                 v.widthAnchor.constraint(equalToConstant: debug ? 1 : 0).isActive = true
