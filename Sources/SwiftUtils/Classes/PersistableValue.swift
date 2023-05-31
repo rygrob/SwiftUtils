@@ -1,6 +1,6 @@
 import Foundation
 
-public class PersistableValue<Element> {
+public class PersistableValue<Element: Codable> {
     
     private let userDefaults: UserDefaults
     private let key: String
@@ -11,15 +11,15 @@ public class PersistableValue<Element> {
         // Need to know.
         self.userDefaults = userDefaults
         self.key = key
+        self.value = initialValue
         
-        // Is there a stored value? If so, start with that.
-        if let val = userDefaults.value(forKey: key) as? Element {
+        // Is there a stored value? If so, use that.
+        if let val = getFromStorage() {
             value = val
         }
         
-        // Otherwise, use the initial value and store that.
+        // Otherwise, store the initial value.
         else {
-            value = initialValue
             store()
         }
     }
@@ -35,7 +35,12 @@ public class PersistableValue<Element> {
         store()
     }
     
+    private func getFromStorage() -> Element? {
+        userDefaults.get(forKey: key)
+    }
+    
     private func store() {
-        userDefaults.setValue(value, forKey: key)
+        userDefaults.set(value, forKey: key)
     }
 }
+
