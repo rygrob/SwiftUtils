@@ -1,7 +1,50 @@
 import Foundation
 
-public class PersistableValue<Element: Codable> {
+@propertyWrapper
+public struct Persistable<Value: Codable> {
+    //
+    let userDefaults: UserDefaults
+    let key: String
+    var value: Value
     
+    public init(with userDefaults: UserDefaults, key: String, initialValue: Value) {
+        // init
+        self.userDefaults = userDefaults
+        self.key = key
+        self.value = initialValue
+        
+        // Is there a stored value? If so, use that.
+        if let val = getFromStorage() {
+            value = val
+        }
+        
+        // Otherwise, store the initial value.
+        else {
+            store()
+        }
+    }
+    
+    public var wrappedValue: Value {
+        get {
+            return value
+        }
+        set {
+            value = newValue
+            store()
+        }
+    }
+    
+    private func getFromStorage() -> Value? {
+        return userDefaults.get(forKey: key)
+    }
+    
+    private func store() {
+        userDefaults.set(value, forKey: key)
+    }
+}
+
+@available(*, deprecated, message: "Prefer to use a property wrapper.")
+public class PersistableValue<Element: Codable> {
     private let userDefaults: UserDefaults
     private let key: String
     private var value: Element
@@ -36,7 +79,7 @@ public class PersistableValue<Element: Codable> {
     }
     
     private func getFromStorage() -> Element? {
-        userDefaults.get(forKey: key)
+        return userDefaults.get(forKey: key)
     }
     
     private func store() {
