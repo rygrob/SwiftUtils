@@ -1,5 +1,4 @@
 #if canImport(UIKit)
-
 import UIKit
 
 public extension UIView {
@@ -15,5 +14,4 @@ public extension UIView {
         return UIView.getAllSubviews(from: self) as [T]
     }
 }
-
 #endif

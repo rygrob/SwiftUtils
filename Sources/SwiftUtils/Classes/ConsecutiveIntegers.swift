@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Ryan Robinson on 6/2/23.
-//
-
 import Foundation
 
 public class ConsecutiveIntegers {

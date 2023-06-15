@@ -1,5 +1,4 @@
 #if canImport(UIKit)
-
 import UIKit
 
 public extension UIImage {
@@ -36,5 +35,4 @@ public extension UIImage {
         return img
     }
 }
-
 #endif

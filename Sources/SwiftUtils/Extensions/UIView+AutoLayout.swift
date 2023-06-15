@@ -1,5 +1,4 @@
 #if canImport(UIKit)
-
 import UIKit
 
 
@@ -108,5 +107,4 @@ public extension UIView {
         return UIView.makeGuideLayers(for: self, axis: axis, multipliers: multipliers, debug: debug)
     }
 }
-
 #endif
